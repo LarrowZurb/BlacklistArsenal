@@ -1,0 +1,10 @@
+//respawn for testing JIP
+respawn = 3;
+enableDebugConsole = 2;
+
+LARs_calculateSideGear = 1;
+
+class CfgFunctions {
+	#include "LARs\blacklistArsenal.cpp"
+};
+

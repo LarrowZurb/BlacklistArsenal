@@ -1,0 +1,28 @@
+JIPID = [ OBJECT, [ WHITELIST, BLACKLIST ], TARGETS, NAME, CONDITION ] call LARs_fnc_blacklistArsenal;
+
+OBJECT - OBJECT to place arsenal action on.
+[ WHITELIST, BLACKLIST ] - STRING, SIDE, ARRAY, where array can hold an of the previous types, STRING can also hold the name of a global variable. Passing true for the whitelist will provide all available gear from the config.
+TARGETS - Target machines to add arsenal on, follows remoteExec conventions.
+NAME - A unique name for the arsenal.
+CONDITION - A CODE {} block holding the condition for displaying the arsenal action.
+
+For white/blacklist's SIDE i have added some arrays of gear dynamically created at mission start from the config.
+It iterates all soldiers to find their default gear ( weapons inc mags for all muzzles and accessories ), the contents of all their backpacks, gear from side specific crates. etc
+Although not ideal it can give you a good base to start from and can be added to or subtracted from by using the lists.
+The SIDEs although not particularly heavy ,are preinit behind the mission load, do involve itterating around the config so i have provided a description.ext variable
+to enable them LARs_calculateSideGear = 1;
+
+I have added a NAME to the parameters as you can know have multiple arsenals per box and will be displayed behind the word arsenal in the action.
+This along with the features of TARGETS and CONDITION can lead to some powerful combinations.
+
+Some examples..
+JIPID = [ myBox, [ west ], west, "west" ] call LARs_fnc_blacklistArsenal;	//all west players see Arsenal - west, and contains only west items
+JIPID = [ myBox, [ true, [ west, civilian ] ], east, "east" ] call LARs_fnc_blacklistArsenal;	//all east players see Arsenal - east, and contains east and independent items
+
+launchers = [ "launch_B_Titan_short_F", "launch_I_Titan_short_F", "launch_O_Titan_short_F", "launch_B_Titan_F", "launch_I_Titan_F", "launch_O_Titan_F", "launch_NLAW_F", "launch_RPG32_F" ];
+JIPID = [ myBox, [ west, "launchers" ], west, "No Launchers" ] call LARs_fnc_blacklistArsenal;
+//All west players see Arsenal - No Launchers and contains all west gear minus specified launchers.
+
+There are a few known issues like some backpacks having wierd loadouts and ive noticed ugl shells and flares are missing although all smokes show.
+As for the definition of SIDEs gear this is unlikely to change other than a few oddities i may fix, but because of the limited data to search on without writing out fixed lists this is about as good as its going to get.
+

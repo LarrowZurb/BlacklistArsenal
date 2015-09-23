@@ -1,0 +1,2 @@
+A set of functions to create and propogate multiple white/blacklisted Arsenal's on the same object.
+An object can have many Arsenals and each can defined for only certain groups of players to be able to use.

@@ -83,7 +83,7 @@ _thread = _this spawn {
 			};
 		}forEach _whiteList;
 	}forEach _blackList;
-diag_log format [ "white - %1", PARMS( _whiteList, 0, 3 ) ];
+
 	//Fix for weapon name compares ( sigh )
 	{
 		if !( isNil "_x" ) then {

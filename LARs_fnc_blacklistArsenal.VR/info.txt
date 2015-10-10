@@ -1,7 +1,7 @@
 JIPID = [ OBJECT, [ WHITELIST, BLACKLIST ], TARGETS, NAME, CONDITION ] call LARs_fnc_blacklistArsenal;
 
 OBJECT - OBJECT to place arsenal action on.
-[ WHITELIST, BLACKLIST ] - STRING, SIDE, ARRAY, where array can hold an of the previous types, STRING can also hold the name of a global variable. Passing true for the whitelist will provide all available gear from the config.
+[ WHITELIST, BLACKLIST ] - STRING, SIDE, ARRAY, where array can hold an of the previous types, STRING can also hold the name of a global variable or CfgPatches class. Passing true for the whitelist will provide all available gear from the config.
 TARGETS - Target machines to add arsenal on, follows remoteExec conventions.
 NAME - A unique name for the arsenal.
 CONDITION - A CODE {} block holding the condition for displaying the arsenal action.

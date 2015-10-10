@@ -104,12 +104,19 @@ switch ( _listType ) do {
 					}forEach ( LARs_sideGear select ( _x call BIS_fnc_sideID ));
 				};
 
-				//if weve passed an item as STRING classname or global variable reference
+				//if weve passed an item as STRING classname or global variable reference or CfgPatches class
 				case ( typeName "" ) : {
 					//if its not a global variable
 					if ( isNil { missionNamespace getVariable [ _x, nil ] } ) then {
-						//find type and add to appropriate index
-						_x call _fnc_findDataType;
+						//Is it a CfgPatches class
+						if ( isClass( configFile >> "CfgPatches" >> _x ) ) then {
+							{
+								_x call _fnc_findDataType;
+							}forEach getArray( configFile >> "CfgPatches" >> _x >> "units" );
+						}else{
+							//Its a classname so find type and add to appropriate index
+							_x call _fnc_findDataType;
+						};
 					}else{
 						//Get the data from the global variable
 						_tmpdata = missionNamespace getVariable [ _x, [] ];
@@ -142,13 +149,20 @@ switch ( _listType ) do {
 					_newList = _newList + ( LARs_sideGear select ( _x call BIS_fnc_sideID ));
 				};
 
-				//if we passed an item classname or a global var
+				//if we passed an item classname or a global var or CfgPatches class
 				case ( typeName "" ) : {
 
 					//If it is not a global var
 					if ( isNil { missionNamespace getVariable [ _x, nil ] } ) then {
-						//push item into the list
-						_nul = _newlist pushBack _x;
+						//Is it a CfgPatches class
+						if ( isClass( configFile >> "CfgPatches" >> _x ) ) then {
+							{
+								_nul = _newlist pushBack _x;
+							}forEach getArray( configFile >> "CfgPatches" >> _x >> "units" );
+						}else{
+							//Its a classname so push item into the list
+							_nul = _newlist pushBack _x;
+						};
 					}else{
 						//Get global vars data
 						_tmpData = missionNamespace getVariable [ _x, [] ];

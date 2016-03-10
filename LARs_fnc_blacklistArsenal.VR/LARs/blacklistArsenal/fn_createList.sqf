@@ -247,6 +247,8 @@ if ( _init && !( _listType isEqualTo "cargo" ) ) then {
 				_tmp = _x arrayIntersect _x;
 				_newList set [ _forEachIndex, _tmp ];
 			};
+		}else{
+			_newList set [ _forEachIndex, [] ];
 		};
 	}forEach _newList;
 	//make all items lower case

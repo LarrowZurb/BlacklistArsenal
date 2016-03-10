@@ -32,9 +32,12 @@ ERROR ( params [
 };
 
 //Remote targets
-OK ( PARMS( _this, 2, 1 )  params[
-	[ "_target", false, [ 0, objNull, sideUnknown, grpNull, [] ] ]
-] ) exitWith {
+PARMS( _this, 2, 1 ) params[
+	[ "_target", false, [ 0, objNull, sideUnknown, grpNull, [], false ] ]
+];
+
+
+if !( _target isEqualType false )  exitWith {
 	_this set [ 2, false ];
 	_this remoteExec [ "LARs_fnc_blacklistArsenal", _target, true ]
 };

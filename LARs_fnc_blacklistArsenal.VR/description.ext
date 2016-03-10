@@ -1,5 +1,7 @@
 //respawn for testing JIP
 respawn = 3;
+respawnDelay = 1;
+
 enableDebugConsole = 2;
 
 LARs_calculateSideGear = 1;

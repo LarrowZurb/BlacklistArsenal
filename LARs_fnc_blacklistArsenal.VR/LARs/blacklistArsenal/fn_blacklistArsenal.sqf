@@ -6,7 +6,7 @@
 //whitelist/blacklist
 //ARRAY of equipment
 //OR
-//STRING name of a global variable holding the array of equipment to be blacklisted - saves passing large blacklist arrays across the network
+//STRING name of a global variable holding the array of equipment to be blacklisted or CfgPatches class - saves passing large blacklist arrays across the network
 //SIDE - experimental list from config of side equipment
 //**********************************
 //targets ( OPTIONAL ) - as per remoteExec ( https://community.bistudio.com/wiki/remoteExec )
@@ -20,28 +20,35 @@
 //CODE condition for showing Arsenal action, passed variables as per addAction, _target - the box, _this - caller
 //**********************************
 
+#define ERROR if !
+#define OK if
+#define PARMS( _var, _index, _count ) [ [], _var select [ _index, _count ] ] select ( count _var >= ( _index + _count ) )
 
 //Arsenal OBJECT
-if !( params [
+ERROR ( params [
 	[ "_box", objNull, [ objNull ] ]
 ] ) exitWith {
 	"Invalid OBJECT to attach arsenal to" call BIS_fnc_error;
 };
 
 //Remote targets
-if ( [ _this select 2 ] params[
-	[ "_target", false, [ 0, objNull, sideUnknown, grpNull, [] ] ]
-] ) exitWith {
+PARMS( _this, 2, 1 ) params[
+	[ "_target", false, [ 0, objNull, sideUnknown, grpNull, [], false ] ]
+];
+
+
+if !( _target isEqualType false )  exitWith {
 	_this set [ 2, false ];
 	_this remoteExec [ "LARs_fnc_blacklistArsenal", _target, true ]
 };
 
 _thread = _this spawn {
 
-//	//If initlizing box at mission start then register a loading screen
-//	_isLoading = if ( time <= 0 ) then {
-//		[ "LARs_blacklist" ] call BIS_fnc_startLoadingScreen;
-//	};
+	//If initlizing box at mission start then register a loading screen
+	_isLoading = isNil "BIS_fnc_init";
+	if ( _isLoading ) then {
+		[ "LARs_blacklist" ] call BIS_fnc_startLoadingScreen;
+	};
 
 	_box = param[ 0 ];
 
@@ -50,6 +57,7 @@ _thread = _this spawn {
 	//White/Blacklist items
 	_lists = param[ 1, [] , [ [] ] ];
 
+	//Get whiteList or default to BIS whitelist
 	_whiteList = _lists param[ 0, LARs_allGear, [ [], "", sideUnknown ] ];
 	_whiteList = [ "white", _whiteList ] call LARs_fnc_createList;
 
@@ -84,24 +92,26 @@ _thread = _this spawn {
 		if !( isNil "_x" ) then {
 			_tmp = _x;
 			{
-				_weaponName = _x call BIS_fnc_baseWeapon;
-				_tmp set [ _forEachIndex, _weaponName ];
-			}forEach _x;
+//				if !( isNil "_x" ) then {
+					_weaponName = _x call BIS_fnc_baseWeapon;
+					_tmp set [ _forEachIndex, _weaponName ];
+//				};
+			}forEach _tmp;
 		};
-	}forEach [ _whitelist select 0, _whitelist select 1, _whitelist select 2 ];
+	}forEach ( PARMS( _whiteList, 0, 3 ) ) ;
 
 	//Create a cargo list
 	_cargo = [ "cargo", _whitelist ] call LARs_fnc_createList;
 
 
 	//Have we given the arsenal a name
-	if !( ( _this select [ 3, 1 ] ) params[ [ "_arsenalName", "default", [ "" ] ] ] ) then {
+	ERROR( PARMS( _this, 3, 1 ) params[ [ "_arsenalName", "default", [ "" ] ] ] ) then {
 		diag_log "WARNING - LARs Arsenal created without name! - default used instead";
 		//format[ "No name supplied for LARs Arsenal on %1", str _box ] call BIS_fnc_error;
 	};
 	//If the box already has an arsenal of this name throw a warning in the RPT
-	if !( isNil { _box getVariable [ format[ "LARs_arsenal_%1_data", _arsenalName ], nil ] } ) then {
-		diag_log format[ "WARNING - Overwriting LARs Arsenal %1 on %2", str _box ];
+	ERROR( isNil { _box getVariable [ format[ "LARs_arsenal_%1_data", _arsenalName ], nil ] } ) then {
+		diag_log format[ "WARNING - Overwriting LARs Arsenal %1 on %2", _arsenalName, str _box ];
 	};
 
 	_condition = param[ 4, {true} , [ {} ] ];
@@ -161,9 +171,9 @@ _thread = _this spawn {
 
 	LARs_initBlacklist = true;
 
-//	if ( _isLoading ) then {
-//		[ "LARs_blacklist" ] call BIS_fnc_endLoadingScreen;
-//	};
+	if ( _isLoading ) then {
+		[ "LARs_blacklist" ] call BIS_fnc_endLoadingScreen;
+	};
 
 };
 

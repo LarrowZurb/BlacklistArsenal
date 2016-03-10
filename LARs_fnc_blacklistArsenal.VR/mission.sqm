@@ -1,21 +1,41 @@
-version=12;
+version=51;
+class EditorData
+{
+	moveGridStep=1;
+	angleGridStep=0.2617994;
+	scaleGridStep=1;
+	autoGroupingDist=10;
+	toggles=1;
+	class ItemIDProvider
+	{
+		nextID=12;
+	};
+	class MarkerIDProvider
+	{
+		nextID=1;
+	};
+	class Camera
+	{
+		pos[]={4250.4058,30,4026.7029};
+		dir[]={0,-0.70710683,0.70710683};
+		up[]={0,0.70710677,0.70710677};
+		aside[]={0.99999994,0,0};
+	};
+};
+binarizationWanted=0;
+addons[]=
+{
+	"A3_Weapons_F_Ammoboxes",
+	"A3_Characters_F_BLUFOR",
+	"a3_characters_f"
+};
+randomSeed=11326997;
+class ScenarioData
+{
+	author="SaNiC";
+};
 class Mission
 {
-	addOns[]=
-	{
-		"A3_Characters_F_BLUFOR",
-		"a3_characters_f",
-		"map_vr",
-		"A3_Weapons_F_Ammoboxes"
-	};
-	addOnsAuto[]=
-	{
-		"A3_Characters_F_BLUFOR",
-		"a3_characters_f",
-		"A3_Weapons_F_Ammoboxes",
-		"map_vr"
-	};
-	randomSeed=8988541;
 	class Intel
 	{
 		startWeather=0;
@@ -32,222 +52,203 @@ class Mission
 		startFogDecay=0.0049999999;
 		forecastFogDecay=0.0049999999;
 	};
-	class Groups
+	class Entities
 	{
-		items=2;
+		items=10;
 		class Item0
 		{
-			side="WEST";
-			class Vehicles
-			{
-				items=1;
-				class Item0
-				{
-					position[]={4250.4058,5,4051.6528};
-					id=0;
-					side="WEST";
-					vehicle="B_Soldier_F";
-					player="PLAYER COMMANDER";
-					leader=1;
-					skill=0.60000002;
-				};
-			};
-		};
-		class Item1
-		{
-			side="WEST";
-			class Vehicles
-			{
-				items=1;
-				class Item0
-				{
-					position[]={4249.71,5,4051.6489};
-					id=1;
-					side="WEST";
-					vehicle="B_soldier_exp_F";
-					player="PLAY CDG";
-					leader=1;
-					skill=0.60000002;
-				};
-			};
-		};
-	};
-	class Vehicles
-	{
-		items=7;
-		class Item0
-		{
-			position[]={4250.2144,5,4053.0811};
-			id=2;
-			side="EMPTY";
-			vehicle="Box_NATO_Wps_F";
-			skill=0.60000002;
-			text="myBox_1";
-			init="nul = this execvm ""east_box.sqf"";";
-			description="init from server to ALL clients";
-		};
-		class Item1
-		{
-			position[]={4252.2681,5,4053.1309};
-			id=3;
-			side="EMPTY";
-			vehicle="Box_NATO_Wps_F";
-			skill=0.60000002;
-			text="myBox_1_1";
-			init="nul = this execvm ""west_box.sqf"";";
-			description="init from server to ALL clients";
-		};
-		class Item2
-		{
-			position[]={4254.4048,5,4053.1475};
-			id=4;
-			side="EMPTY";
-			vehicle="Box_NATO_Wps_F";
-			skill=0.60000002;
-			text="myBox_1_2";
-			init="nul = this execvm ""indep_box.sqf"";";
-			description="init from server to ALL clients";
-		};
-		class Item3
-		{
-			position[]={4256.3247,5,4053.1475};
-			id=5;
-			side="EMPTY";
-			vehicle="Box_NATO_Wps_F";
-			skill=0.60000002;
-			text="myBox_1_2_1";
-			init="nul = this execvm ""civ_box.sqf"";";
-			description="init from server to ALL clients";
-		};
-		class Item4
-		{
-			position[]={4252.168,5,4050.7446};
-			id=6;
-			side="EMPTY";
-			vehicle="Box_NATO_Wps_F";
-			skill=0.60000002;
-			text="myBox_1_1_1";
-			init="nul = this execvm ""mybox.sqf"";";
-			description="init from server to ALL clients";
-		};
-		class Item5
-		{
-			position[]={4254.3047,5,4050.7612};
-			id=7;
-			side="EMPTY";
-			vehicle="Box_NATO_Wps_F";
-			skill=0.60000002;
-			text="myBox_1_2_2";
-			init="nul = this execvm ""noSupport.sqf"";";
-			description="init from server to ALL clients";
-		};
-		class Item6
-		{
-			position[]={4253.2197,5,4055.3506};
-			id=8;
-			side="EMPTY";
-			vehicle="Box_NATO_Wps_F";
-			skill=0.60000002;
-			text="myBox_1_1_2";
-			init="nul = this execvm ""multi_box.sqf"";";
-			description="init from server to ALL clients";
-		};
-	};
-	class Markers
-	{
-		items=1;
-		class Item0
-		{
+			dataType="Marker";
 			position[]={4251.041,5,4051.6265};
 			name="respawn_west";
 			type="Empty";
+			id=0;
 		};
-	};
-};
-class Intro
-{
-	addOns[]=
-	{
-		"map_vr"
-	};
-	addOnsAuto[]=
-	{
-		"map_vr"
-	};
-	randomSeed=11775912;
-	class Intel
-	{
-		timeOfChanges=1800.0002;
-		startWeather=0;
-		startWind=0.1;
-		startWaves=0.1;
-		forecastWeather=0;
-		forecastWind=0.1;
-		forecastWaves=0.1;
-		forecastLightnings=0.1;
-		year=2035;
-		day=28;
-		hour=13;
-		minute=37;
-		startFogDecay=0.0049999999;
-		forecastFogDecay=0.0049999999;
-	};
-};
-class OutroWin
-{
-	addOns[]=
-	{
-		"map_vr"
-	};
-	addOnsAuto[]=
-	{
-		"map_vr"
-	};
-	randomSeed=12365309;
-	class Intel
-	{
-		timeOfChanges=1800.0002;
-		startWeather=0;
-		startWind=0.1;
-		startWaves=0.1;
-		forecastWeather=0;
-		forecastWind=0.1;
-		forecastWaves=0.1;
-		forecastLightnings=0.1;
-		year=2035;
-		day=28;
-		hour=13;
-		minute=37;
-		startFogDecay=0.0049999999;
-		forecastFogDecay=0.0049999999;
-	};
-};
-class OutroLoose
-{
-	addOns[]=
-	{
-		"map_vr"
-	};
-	addOnsAuto[]=
-	{
-		"map_vr"
-	};
-	randomSeed=13673660;
-	class Intel
-	{
-		timeOfChanges=1800.0002;
-		startWeather=0;
-		startWind=0.1;
-		startWaves=0.1;
-		forecastWeather=0;
-		forecastWind=0.1;
-		forecastWaves=0.1;
-		forecastLightnings=0.1;
-		year=2035;
-		day=28;
-		hour=13;
-		minute=37;
-		startFogDecay=0.0049999999;
-		forecastFogDecay=0.0049999999;
+		class Item1
+		{
+			dataType="Object";
+			class PositionInfo
+			{
+				position[]={4250.2144,5.1887245,4053.0811};
+			};
+			side="Empty";
+			class Attributes
+			{
+				skill=0.60000002;
+				init="nul = this execvm ""east_box.sqf"";";
+				name="myBox_1";
+				description="init from server to ALL clients";
+			};
+			id=1;
+			type="Box_NATO_Wps_F";
+		};
+		class Item2
+		{
+			dataType="Object";
+			class PositionInfo
+			{
+				position[]={4252.2681,5.1887245,4053.1309};
+			};
+			side="Empty";
+			class Attributes
+			{
+				skill=0.60000002;
+				init="nul = this execvm ""west_box.sqf"";";
+				name="myBox_1_1";
+				description="init from server to ALL clients";
+			};
+			id=2;
+			type="Box_NATO_Wps_F";
+		};
+		class Item3
+		{
+			dataType="Object";
+			class PositionInfo
+			{
+				position[]={4254.4048,5.1887245,4053.1475};
+			};
+			side="Empty";
+			class Attributes
+			{
+				skill=0.60000002;
+				init="nul = this execvm ""indep_box.sqf"";";
+				name="myBox_1_2";
+				description="init from server to ALL clients";
+			};
+			id=3;
+			type="Box_NATO_Wps_F";
+		};
+		class Item4
+		{
+			dataType="Object";
+			class PositionInfo
+			{
+				position[]={4256.3247,5.1887245,4053.1475};
+			};
+			side="Empty";
+			class Attributes
+			{
+				skill=0.60000002;
+				init="nul = this execvm ""civ_box.sqf"";";
+				name="myBox_1_2_1";
+				description="init from server to ALL clients";
+			};
+			id=4;
+			type="Box_NATO_Wps_F";
+		};
+		class Item5
+		{
+			dataType="Object";
+			class PositionInfo
+			{
+				position[]={4252.168,5.1887245,4050.7446};
+			};
+			side="Empty";
+			class Attributes
+			{
+				skill=0.60000002;
+				init="nul = this execvm ""mybox.sqf"";";
+				name="myBox_1_1_1";
+				description="init from server to ALL clients";
+			};
+			id=5;
+			type="Box_NATO_Wps_F";
+		};
+		class Item6
+		{
+			dataType="Object";
+			class PositionInfo
+			{
+				position[]={4254.3047,5.1887245,4050.7612};
+			};
+			side="Empty";
+			class Attributes
+			{
+				skill=0.60000002;
+				init="nul = this execvm ""noSupport.sqf"";";
+				name="myBox_1_2_2";
+				description="init from server to ALL clients";
+			};
+			id=6;
+			type="Box_NATO_Wps_F";
+		};
+		class Item7
+		{
+			dataType="Object";
+			class PositionInfo
+			{
+				position[]={4253.2197,5.1887245,4055.3506};
+			};
+			side="Empty";
+			class Attributes
+			{
+				skill=0.60000002;
+				init="nul = this execvm ""multi_box.sqf"";";
+				name="myBox_1_1_2";
+				description="init from server to ALL clients";
+			};
+			id=7;
+			type="Box_NATO_Wps_F";
+		};
+		class Item8
+		{
+			dataType="Group";
+			side="West";
+			class Entities
+			{
+				items=1;
+				class Item0
+				{
+					dataType="Object";
+					class PositionInfo
+					{
+						position[]={4250.4058,5.0014391,4051.7529};
+					};
+					side="West";
+					flags=2;
+					class Attributes
+					{
+						skill=0.60000002;
+						isPlayer=1;
+						isPlayable=1;
+					};
+					id=9;
+					type="B_Soldier_F";
+				};
+			};
+			class Attributes
+			{
+			};
+			id=8;
+		};
+		class Item9
+		{
+			dataType="Group";
+			side="West";
+			class Entities
+			{
+				items=1;
+				class Item0
+				{
+					dataType="Object";
+					class PositionInfo
+					{
+						position[]={4249.71,5.0014391,4051.749};
+					};
+					side="West";
+					flags=2;
+					class Attributes
+					{
+						skill=0.60000002;
+						isPlayable=1;
+					};
+					id=11;
+					type="B_soldier_exp_F";
+				};
+			};
+			class Attributes
+			{
+			};
+			id=10;
+		};
 	};
 };

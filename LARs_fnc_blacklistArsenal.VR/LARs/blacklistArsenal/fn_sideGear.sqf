@@ -143,6 +143,110 @@ _fnc_transClasses = {
 	};
 "configClasses ( configFile >> "CfgVehicles" );
 
+"
+	_cfgName = configname _x;
+	_cfg = _x;
+	if ( getNumber( _cfg >> 'scope') isEqualTo 2 ) then {
+
+		switch ( true ) do {
+
+			comment 'Uniforms';
+			case ( _cfgName isKindOf [ 'Uniform_Base', configFile >> 'CfgWeapons' ] ) : {
+
+				_baseMan = getText( _cfg >> 'ItemInfo' >> 'uniformClass' );
+				_side = getNumber( configfile >> 'CfgVehicles' >> _baseman >> 'side' );
+				if ( _side in [0,1,2,3] ) then {
+					_gear = ( LARs_sideGear select _side );
+					_nul = _gear pushBackUnique _cfgName;
+					LARs_sideGear set [ _side, _gear ];
+				};
+			};
+
+			comment 'Vests';
+			case ( _cfgName isKindOf [ 'Vest_Camo_Base', configFile >> 'CfgWeapons' ] || _cfgName isKindOf [ 'Vest_NoCamo_Base', configFile >> 'CfgWeapons' ] ) : {
+
+				_found = false;
+				{
+					if ( [ _x, getText( _cfg >> 'displayName' ) ] call BIS_fnc_inString ) exitWith {
+						_gear = LARs_sideGear select _forEachIndex;
+						_nul = _gear pushBackUnique _cfgName;
+						LARs_sideGear set [ _forEachIndex, _gear ];
+						_found = true;
+					};
+				}forEach [ 'CSAT', 'NATO', 'AAF' ];
+				if ( _found ) exitwith {};
+
+				{
+					_side = _x;
+					if ( _side in ( getText( _cfg >> 'ItemInfo' >> 'uniformModel' ) splitString '\' ) ) exitwith {
+						_gear = LARs_sideGear select _forEachIndex;
+						_nul = _gear pushBackUnique _cfgName;
+						LARs_sideGear set [ _forEachIndex, _gear ];
+					};
+				}forEach [ 'OPFOR', 'BLUFOR', 'INDEP', 'Civil' ];
+			};
+
+			comment 'Headgear';
+			case ( _cfgName isKindOf [ 'H_HelmetB', configFile >> 'CfgWeapons' ] || _cfgName isKindOf [ 'HelmetBase', configFile >> 'CfgWeapons' ] ) : {
+
+				_found = false;
+				{
+					if ( [ _x, getText( _cfg >> 'displayName' ) ] call BIS_fnc_inString ) exitWith {
+						_gear = LARs_sideGear select _forEachIndex;
+						_nul = _gear pushBackUnique _cfgName;
+						LARs_sideGear set [ _forEachIndex, _gear ];
+						_found = true;
+					};
+				}forEach [ 'CSAT', 'NATO', 'AAF' ];
+				if ( _found ) exitwith {};
+
+				{
+					_side = _x;
+					if ( _side in ( getText( _cfg >> 'ItemInfo' >> 'uniformModel' ) splitString '\' ) ) exitwith {
+						_gear = LARs_sideGear select _forEachIndex;
+						_nul = _gear pushBackUnique _cfgName;
+						LARs_sideGear set [ _forEachIndex, _gear ];
+						_found = true;
+					};
+				}forEach [ 'OPFOR', 'BLUFOR', 'INDEP', 'Civil' ];
+				if ( _found ) exitwith {};
+
+				{
+					switch ( _side ) do {
+						case 0;
+						case 1;
+						case 2 : {
+							_gear = LARs_sideGear select _side;
+							_nul = _gear pushBackUnique _cfgName;
+							LARs_sideGear set [ _side, _gear ];
+						};
+						case 6 : {
+							{
+								_gear = LARs_sideGear select _x;
+								_nul = _gear pushBackUnique _cfgName;
+								LARs_sideGear set [ _x, _gear ];
+							}forEach [ 0, 1, 2, 3 ];
+						};
+					};
+
+				}forEach getArray( _cfg >> 'ItemInfo' >> 'modelSides' );
+			};
+		};
+	};
+" configClasses ( configFile >> "CfgWeapons" );
+
+"
+	_cfg = _x;
+	_cfgName = configName _cfg;
+	if ( getNumber( _cfg >> 'scope') isEqualTo 2 ) then {
+		{
+			_gear = LARs_sideGear select _x;
+			_nul = _gear pushBackUnique _cfgName;
+			LARs_sideGear set [ _x, _gear ];
+		}forEach [0,1,2,3];
+	};
+" configClasses ( configFile >> "CfgGlasses" );
+
 {
 	_gear = _x - [ "" ];
 	_gear = _gear arrayIntersect _gear;

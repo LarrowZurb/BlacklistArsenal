@@ -36,11 +36,24 @@ PARMS( _this, 2, 1 ) params[
 	[ "_target", false, [ 0, objNull, sideUnknown, grpNull, [], false ] ]
 ];
 
+//Have we given the arsenal a name
+ERROR( PARMS( _this, 3, 1 ) params[ [ "_arsenalName", "default", [ "" ] ] ] ) then {
+	diag_log "WARNING - LARs Arsenal created without name! - default used instead";
+	//format[ "No name supplied for LARs Arsenal on %1", str _box ] call BIS_fnc_error;
+};
+
+//If the box already has an arsenal of this name throw a warning in the RPT
+ERROR( isNil { _box getVariable [ format[ "LARs_arsenal_%1_data", _arsenalName ], nil ] } ) then {
+	diag_log format[ "WARNING - Overwriting LARs Arsenal %1 on %2", _arsenalName, str _box ];
+};
+
+[ _box ] call BIS_fnc_objectVar;
 
 if !( _target isEqualType false )  exitWith {
 	_this set [ 2, false ];
-	_this remoteExec [ "LARs_fnc_blacklistArsenal", _target, true ]
+	_this remoteExec [ "LARs_fnc_blacklistArsenal", _target, format[ "%1_%2", _box, _arsenalName ] ]
 };
+
 
 _thread = _this spawn {
 
@@ -50,20 +63,27 @@ _thread = _this spawn {
 		[ "LARs_blacklist" ] call BIS_fnc_startLoadingScreen;
 	};
 
-	_box = param[ 0 ];
+	params[ "_box",
+		[ "_lists", [], [ [] ] ],
+		"_target",
+		"_arsenalName",
+		[ "_condition", {true} , [ {} ] ]
+	];
 
 	waitUntil { !isNil "LARs_allGearInit" };
 
-	//White/Blacklist items
-	_lists = param[ 1, [] , [ [] ] ];
-
 	//Get whiteList or default to BIS whitelist
 	_whiteList = _lists param[ 0, LARs_allGear, [ [], "", sideUnknown ] ];
-	_whiteList = [ "white", _whiteList ] call LARs_fnc_createList;
-
+	if !( _whiteList isEqualType [] ) then {
+		_whiteList = [ _whiteList ];
+	};
+	//Get blackList or default to []
 	_blackList = _lists param[ 1, [], [ [], "", sideUnknown ] ];
-	_blackList = [ "black", _blackList ] call LARs_fnc_createList;
-
+	if !( _blackList isEqualType [] ) then {
+		_blackList = [ _blackList ];
+	};
+	
+	//If a list requires a side and calculateSideGear is not in use exit with error
 	if ( {
 		{
 			if !( isNil "_x" ) then {
@@ -76,45 +96,19 @@ _thread = _this spawn {
 		"SIDE used in white/blacklist - currently no side data, switch on LARs_calculateSideGear in description" call BIS_fnc_error;
 	};
 
+	//Create lists
+	_whiteList = [ "white", _whiteList ] call LARs_fnc_createList;
+	_blackList = [ "black", _blackList ] call LARs_fnc_createList;
+
 	//Remove blacklist items from the whitelist
-	{
-		_item = _x;
-		{
-			if ( !isNil "_x" && { _item in _x } ) then {
-				_tmp = _x - [ _item ];
-				_whiteList set [ _forEachIndex, _tmp ];
-			};
-		}forEach _whiteList;
-	}forEach _blackList;
+	_whiteList = [ _whiteList, _blackList ] call LARs_fnc_removeBlack;
 
 	//Fix for weapon name compares ( sigh )
-	{
-		if !( isNil "_x" ) then {
-			_tmp = _x;
-			{
-//				if !( isNil "_x" ) then {
-					_weaponName = _x call BIS_fnc_baseWeapon;
-					_tmp set [ _forEachIndex, _weaponName ];
-//				};
-			}forEach _tmp;
-		};
-	}forEach ( PARMS( _whiteList, 0, 3 ) ) ;
+	_whiteList = [ _whiteList ] call LARs_fnc_fixWeaponNames;
 
 	//Create a cargo list
 	_cargo = [ "cargo", _whitelist ] call LARs_fnc_createList;
 
-
-	//Have we given the arsenal a name
-	ERROR( PARMS( _this, 3, 1 ) params[ [ "_arsenalName", "default", [ "" ] ] ] ) then {
-		diag_log "WARNING - LARs Arsenal created without name! - default used instead";
-		//format[ "No name supplied for LARs Arsenal on %1", str _box ] call BIS_fnc_error;
-	};
-	//If the box already has an arsenal of this name throw a warning in the RPT
-	ERROR( isNil { _box getVariable [ format[ "LARs_arsenal_%1_data", _arsenalName ], nil ] } ) then {
-		diag_log format[ "WARNING - Overwriting LARs Arsenal %1 on %2", _arsenalName, str _box ];
-	};
-
-	_condition = param[ 4, {true} , [ {} ] ];
 
 	//Add aresnal data and condition to the box
 	_box setVariable [ format[ "LARs_arsenal_%1_data", _arsenalName], _whiteList];

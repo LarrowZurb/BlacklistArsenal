@@ -41,13 +41,17 @@ if !( params[ "_listType", "_list", [ "_newList", [] ] ] ) then {
 	_list = _list call LARs_fnc_toLower;
 
 	//if the list is not an array make it into one
-	if !( typeName _list isEqualTo typeName [] ) then {
+	if !( _list isEqualType [] ) then {
 		_list = [ _list ];
 	};
 
 }else{
 	//_newList was passed so this is an iteration of the script
 	_init = false;
+	
+	if !( _list isEqualType [] ) then {
+		_list = [ _list ];
+	};
 };
 
 
@@ -86,9 +90,9 @@ _fnc_findDataType = {
 };
 
 
-switch ( _listType ) do {
+switch ( toLower _listType ) do {
 
-	//WHITE
+	//WHITE - seperates items into categories see _dataTypes
 	case "white" : {
 
 		//foreach passed item, side, global variable( STRING name ) or array holding any of previous
@@ -130,7 +134,7 @@ switch ( _listType ) do {
 					{
 						//foreach item in the array recall this script
 						_newList = [ _listType, _x, _newlist ] call LARs_fnc_createList;
-					}forEach _list;
+					}forEach _x;
 				};
 			};
 		}forEach _list;
@@ -183,7 +187,7 @@ switch ( _listType ) do {
 		}forEach _list;
 	};
 
-	//CARGO
+	//CARGO - Same structure as addVirtualCargo [ Items, Weapons, Magazines, Backpacks ]
 	case "cargo" : {
 		{
 			if !( isNil "_x" ) then {
@@ -241,7 +245,7 @@ if ( _init && !( _listType isEqualTo "cargo" ) ) then {
 	{
 		if ( !isNil { _x } ) then {
 			//if an array
-			if ( typeName _x isEqualTo typeName [] ) then {
+			if ( _x isEqualType [] ) then {
 				private [ "_tmp" ];
 				//Get rid of duplicates
 				_tmp = _x arrayIntersect _x;
@@ -253,6 +257,23 @@ if ( _init && !( _listType isEqualTo "cargo" ) ) then {
 	}forEach _newList;
 	//make all items lower case
 	_newList = _newList call LARs_fnc_toLower;
+};
+
+if ( _init ) then {
+	switch( toLower _listType ) do {
+		case ( "white" ) : {
+			if ( count _newList < count _dataTypes ) then {
+				_newList resize ( count _dataTypes );
+			};
+			_newList = _newList apply{ if( isNil "_x" ) then { [] }else{ _x } };
+		};
+		case ( "cargo" ) : {
+			if ( count _newList < 4 ) then {
+				_newList resize 4;
+			};
+			_newList = _newList apply{ if( isNil "_x" ) then { [] }else{ _x } };
+		};
+	};
 };
 
 _newList

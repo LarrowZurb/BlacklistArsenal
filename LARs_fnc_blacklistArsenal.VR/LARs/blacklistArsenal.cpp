@@ -1,20 +1,16 @@
-class LARs {
+class LARs_blacklistArsenal {
+	tag = "LARs";
 	class Inventory {
-		class blacklistArsenal {
-			file = "LARs\blacklistArsenal\fn_blacklistArsenal.sqf";
-		};
-		class tolower {
-			file = "LARs\blacklistArsenal\fn_toLower.sqf";
-		};
-		class createList {
-			file = "LARs\blacklistArsenal\fn_createList.sqf";
-		};
-		class sideGear {
-			file = "LARs\blacklistArsenal\fn_sideGear.sqf";
-		};
+		file = "LARs\blacklistArsenal";
 		class allGear {
-			file = "LARs\blacklistArsenal\fn_allGear.sqf";
 			preInit = 1;
 		};
+		class blacklistArsenal {};
+		class createList {};
+		class fixWeaponNames {};
+		class removeBlack {};		
+		class sideGear {};
+		class tolower {};		
+		class updateArsenal {};
 	};
 };

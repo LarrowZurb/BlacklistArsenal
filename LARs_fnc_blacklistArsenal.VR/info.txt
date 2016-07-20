@@ -26,3 +26,10 @@ JIPID = [ myBox, [ west, "launchers" ], west, "No Launchers" ] call LARs_fnc_bla
 There are a few known issues like some backpacks having wierd loadouts and ive noticed ugl shells and flares are missing although all smokes show.
 As for the definition of SIDEs gear this is unlikely to change other than a few oddities i may fix, but because of the limited data to search on without writing out fixed lists this is about as good as its going to get.
 
+//*********
+Added function to allow blacklistArsenals to be updated.
+//[ box, arsenalName, [ white, black ], targets ] call LARs_fnc_updateArsenal
+box - the object that had a blacklistArsenal placed on it
+arsenalName - The name given to the blacklistArsenal
+[ white, black ] - Items same as blacklistArsenal( var, array, side etc ) to add( white )/remove( black ) from the current named blacklistArsenals
+targets - Same as blacklistArsenal, false means just apply locally, otherwise follows remoteexec ( 0, side, group etc ) 

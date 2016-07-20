@@ -1,4 +1,4 @@
-version=51;
+version=52;
 class EditorData
 {
 	moveGridStep=1;
@@ -25,9 +25,37 @@ class EditorData
 binarizationWanted=0;
 addons[]=
 {
+	"A3_Ui_F",
 	"A3_Weapons_F_Ammoboxes",
-	"A3_Characters_F_BLUFOR",
-	"a3_characters_f"
+	"A3_Characters_F"
+};
+class AddonsMetaData
+{
+	class List
+	{
+		items=3;
+		class Item0
+		{
+			className="A3_Ui_F";
+			name="Arma 3 - User Interface";
+			author="Bohemia Interactive";
+			url="http://www.arma3.com";
+		};
+		class Item1
+		{
+			className="A3_Weapons_F";
+			name="Arma 3 Alpha - Weapons and Accessories";
+			author="Bohemia Interactive";
+			url="http://www.arma3.com";
+		};
+		class Item2
+		{
+			className="A3_Characters_F";
+			name="Arma 3 Alpha - Characters and Clothing";
+			author="Bohemia Interactive";
+			url="http://www.arma3.com";
+		};
+	};
 };
 randomSeed=11326997;
 class ScenarioData
@@ -71,6 +99,7 @@ class Mission
 				position[]={4250.2144,5.1887245,4053.0811};
 			};
 			side="Empty";
+			flags=4;
 			class Attributes
 			{
 				skill=0.60000002;
@@ -89,6 +118,7 @@ class Mission
 				position[]={4252.2681,5.1887245,4053.1309};
 			};
 			side="Empty";
+			flags=4;
 			class Attributes
 			{
 				skill=0.60000002;
@@ -107,6 +137,7 @@ class Mission
 				position[]={4254.4048,5.1887245,4053.1475};
 			};
 			side="Empty";
+			flags=4;
 			class Attributes
 			{
 				skill=0.60000002;
@@ -125,6 +156,7 @@ class Mission
 				position[]={4256.3247,5.1887245,4053.1475};
 			};
 			side="Empty";
+			flags=4;
 			class Attributes
 			{
 				skill=0.60000002;
@@ -143,6 +175,7 @@ class Mission
 				position[]={4252.168,5.1887245,4050.7446};
 			};
 			side="Empty";
+			flags=4;
 			class Attributes
 			{
 				skill=0.60000002;
@@ -161,6 +194,7 @@ class Mission
 				position[]={4254.3047,5.1887245,4050.7612};
 			};
 			side="Empty";
+			flags=4;
 			class Attributes
 			{
 				skill=0.60000002;
@@ -179,6 +213,7 @@ class Mission
 				position[]={4253.2197,5.1887245,4055.3506};
 			};
 			side="Empty";
+			flags=4;
 			class Attributes
 			{
 				skill=0.60000002;
@@ -204,7 +239,7 @@ class Mission
 						position[]={4250.4058,5.0014391,4051.7529};
 					};
 					side="West";
-					flags=2;
+					flags=6;
 					class Attributes
 					{
 						skill=0.60000002;
@@ -235,7 +270,7 @@ class Mission
 						position[]={4249.71,5.0014391,4051.749};
 					};
 					side="West";
-					flags=2;
+					flags=6;
 					class Attributes
 					{
 						skill=0.60000002;

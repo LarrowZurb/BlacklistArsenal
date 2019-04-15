@@ -1,0 +1,28 @@
+_dataTypes = [
+	["AssaultRifle","MachineGun","SniperRifle","Shotgun","Rifle","SubmachineGun"],
+	["Launcher","MissileLauncher","RocketLauncher"],
+	["Handgun"],
+	["Uniform"],
+	["Vest"],
+	["Backpack"],
+	["Headgear"],
+	["Glasses"],
+	["NVGoggles"],
+	["Binocular","LaserDesignator"],
+	["Map"],
+	["GPS","UAVTerminal"],
+	["Radio"],
+	["Compass"],
+	["Watch"],
+	[],//face
+	[],//voice
+	[],//insignia
+	["AccessorySights"],//optic
+	["AccessoryPointer"],//acc
+	["AccessoryMuzzle"],//muz
+	["Bullet"],//mag
+	["Grenade","SmokeShell"],
+	["Mine","MineBounding","MineDirectional"],
+	["FirstAidKit","Medikit","MineDetector","Toolkit"],
+	["AccessoryBipod"]//bipod
+];

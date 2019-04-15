@@ -8,7 +8,7 @@ class EditorData
 	toggles=1;
 	class ItemIDProvider
 	{
-		nextID=12;
+		nextID=14;
 	};
 	class MarkerIDProvider
 	{
@@ -16,10 +16,10 @@ class EditorData
 	};
 	class Camera
 	{
-		pos[]={4250.4058,30,4026.7029};
-		dir[]={0,-0.70710683,0.70710683};
-		up[]={0,0.70710677,0.70710677};
-		aside[]={0.99999994,0,0};
+		pos[]={4251.6973,20.050098,4042.2727};
+		dir[]={0.0036073718,-0.7092405,0.70496464};
+		up[]={0.0036292223,0.70495933,0.70923847};
+		aside[]={0.99999011,1.2140299e-007,-0.00511637};
 	};
 };
 binarizationWanted=0;
@@ -82,7 +82,7 @@ class Mission
 	};
 	class Entities
 	{
-		items=10;
+		items=12;
 		class Item0
 		{
 			dataType="Marker";
@@ -172,7 +172,7 @@ class Mission
 			dataType="Object";
 			class PositionInfo
 			{
-				position[]={4252.168,5.1887245,4050.7446};
+				position[]={4252.168,5.1887245,4050.7451};
 			};
 			side="Empty";
 			flags=4;
@@ -284,6 +284,44 @@ class Mission
 			{
 			};
 			id=10;
+		};
+		class Item10
+		{
+			dataType="Object";
+			class PositionInfo
+			{
+				position[]={4249.8721,5.1887245,4055.542};
+			};
+			side="Empty";
+			flags=4;
+			class Attributes
+			{
+				skill=0.60000002;
+				init="nul = this execvm ""LARs_allgear_box.sqf"";";
+				name="myBox_2";
+				description="init from server to ALL clients";
+			};
+			id=12;
+			type="Box_NATO_Wps_F";
+		};
+		class Item11
+		{
+			dataType="Object";
+			class PositionInfo
+			{
+				position[]={4248.3008,5.1887245,4055.5681};
+			};
+			side="Empty";
+			flags=4;
+			class Attributes
+			{
+				skill=0.60000002;
+				init="nul = this execvm ""LARs_sideGear_box.sqf"";";
+				name="myBox_3";
+				description="init from server to ALL clients";
+			};
+			id=13;
+			type="Box_NATO_Wps_F";
 		};
 	};
 };

@@ -1,7 +1,7 @@
 #define CFGEntry ( missionConfigFile >> "LARs_calculateSideGear" )
 
 if !( is3DEN ) then {
-
+diag_log "preInit";
 	[ "LARs_initData" ] call BIS_fnc_startLoadingScreen;
 
 	_fullVersion = false;
@@ -9,7 +9,7 @@ if !( is3DEN ) then {
 	_init = ["Preload"] call BIS_fnc_arsenal;
 
 	LARs_allGear = BIS_fnc_arsenal_data;
-	LARs_allGear = LARs_allGear call LARs_fnc_tolower;
+//	LARs_allGear = LARs_allGear call LARs_fnc_tolower;
 
 	if ( isNumber( CFGEntry ) && { getNumber( CFGEntry ) > 0 } ) then {
 		[] call LARs_fnc_sideGear;

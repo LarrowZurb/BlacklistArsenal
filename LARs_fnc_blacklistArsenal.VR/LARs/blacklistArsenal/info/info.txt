@@ -1,0 +1,56 @@
+BIS cargo white list missionNamespace "bis_fnc_arsenal_data"
+struture..
+0		_types set [IDC_RSCDISPLAYARSENAL_TAB_PRIMARYWEAPON,["AssaultRifle","MachineGun","SniperRifle","Shotgun","Rifle","SubmachineGun"]];\
+1		_types set [IDC_RSCDISPLAYARSENAL_TAB_SECONDARYWEAPON,["Launcher","MissileLauncher","RocketLauncher"]];\
+2		_types set [IDC_RSCDISPLAYARSENAL_TAB_HANDGUN,["Handgun"]];\
+3		_types set [IDC_RSCDISPLAYARSENAL_TAB_UNIFORM,["Uniform"]];\
+4		_types set [IDC_RSCDISPLAYARSENAL_TAB_VEST,["Vest"]];\
+5		_types set [IDC_RSCDISPLAYARSENAL_TAB_BACKPACK,["Backpack"]];\
+6		_types set [IDC_RSCDISPLAYARSENAL_TAB_HEADGEAR,["Headgear"]];\
+7		_types set [IDC_RSCDISPLAYARSENAL_TAB_GOGGLES,["Glasses"]];\
+8		_types set [IDC_RSCDISPLAYARSENAL_TAB_NVGS,["NVGoggles"]];\
+9		_types set [IDC_RSCDISPLAYARSENAL_TAB_BINOCULARS,["Binocular","LaserDesignator"]];\
+10		_types set [IDC_RSCDISPLAYARSENAL_TAB_MAP,["Map"]];\
+11		_types set [IDC_RSCDISPLAYARSENAL_TAB_GPS,["GPS","UAVTerminal"]];\
+12		_types set [IDC_RSCDISPLAYARSENAL_TAB_RADIO,["Radio"]];\
+13		_types set [IDC_RSCDISPLAYARSENAL_TAB_COMPASS,["Compass"]];\
+14		_types set [IDC_RSCDISPLAYARSENAL_TAB_WATCH,["Watch"]];\
+15		_types set [IDC_RSCDISPLAYARSENAL_TAB_FACE,[]];\
+16		_types set [IDC_RSCDISPLAYARSENAL_TAB_VOICE,[]];\
+17		_types set [IDC_RSCDISPLAYARSENAL_TAB_INSIGNIA,[]];\
+18		_types set [IDC_RSCDISPLAYARSENAL_TAB_ITEMOPTIC,[]];\
+19		_types set [IDC_RSCDISPLAYARSENAL_TAB_ITEMACC,[]];\
+20		_types set [IDC_RSCDISPLAYARSENAL_TAB_ITEMMUZZLE,[]];\
+21		_types set [IDC_RSCDISPLAYARSENAL_TAB_CARGOMAG,[]];\
+22		_types set [IDC_RSCDISPLAYARSENAL_TAB_CARGOTHROW,[/*"Grenade","SmokeShell"*/]];\
+23		_types set [IDC_RSCDISPLAYARSENAL_TAB_CARGOPUT,[/*"Mine","MineBounding","MineDirectional"*/]];\
+24		_types set [IDC_RSCDISPLAYARSENAL_TAB_CARGOMISC,["FirstAidKit","Medikit","MineDetector","Toolkit"]];
+25		_types set [IDC_RSCDISPLAYARSENAL_TAB_ITEMBIPOD,[]];\
+
+
+_defaultItems = uinamespace getvariable ["bis_fnc_arsenal_defaultItems",[]];
+_defaultShow = uinamespace getvariable ["bis_fnc_arsenal_defaultShow",-1];
+uinamespace getvariable "bis_fnc_arsenal_equipmentStats"
+
+
+per arsenal whitelists
+missionNamespace "bis_addVirtualWeaponCargo_cargo" [ [], [], [], []  ]
+["bis_addVirtualWeaponCargo_cargo",[[],[],[],[]]]; from container
+BIS_fnc_getVirtual#Cargo selects corresponding array being [ items, weapons, magazines, backpacks ]
+
+
+BIS_fnc_arsenal_center = object to center camera on and get inventory from
+BIS_fnc_arsenal_cargo = object <box> being used to initiate arsenal
+
+
+Items that are displayed are anything from virtualcargos and players equipment that is in the whitelist
+
+___________________________________________________________
+LARs
+arsenal data structure, stored on object that initiates arsenal <box>
+[
+	[ arsenal names ],
+	[ arsenal action ids ],
+	[ whitelist ],  in the same structure as bis_fnc_arsenal_data
+	[ blacklist ]	a list of everything
+]

@@ -46,19 +46,16 @@ _center = (missionNamespace getVariable ["BIS_fnc_arsenal_center",player]);
 _return = false;
 _ctrlTemplate = _display displayCtrl IDC_RSCDISPLAYARSENAL_TEMPLATE_TEMPLATE;
 _inTemplate = ctrlFade _ctrlTemplate == 0;
+_fullVersion = missionnamespace getvariable ["BIS_fnc_arsenal_fullArsenal",false];
 
 switch true do {
 	case (_key == DIK_ESCAPE): {
+		
 		if (_inTemplate) then {
-			diag_log "In Template";
-			_ctrlTemplate ctrlSetFade 1;
-			_ctrlTemplate ctrlCommit 0;
-			_ctrlTemplate ctrlEnable false;
-
-			_ctrlMouseBlock = _display displayCtrl IDC_RSCDISPLAYARSENAL_MOUSEBLOCK;
-			_ctrlMouseBlock ctrlEnable false;
+			
+			[ _display, "", false ] call LARs_fnc_showRestrictedItems;
+			
 		} else {
-			diag_log "Not In Template";
 			if (_fullVersion) then {["buttonClose",[_display]] spawn BIS_fnc_arsenal;} else {_display closeDisplay 2;};
 		};
 		_return = true;
@@ -131,28 +128,26 @@ switch true do {
 	};
 	//--- Open
 	case (_key == DIK_O): {
-		if (_ctrl) then {['buttonLoad',[_display]] call BIS_fnc_arsenal;};
+		if (_ctrl) then {['buttonLoad',[_display]] call bis_fnc_arsenal;[_display] call LARs_fnc_applyLBColors;};
 	};
 	//--- Randomize
-	//Disable Random selection
-	case (_key == DIK_R): {
-//		if (_ctrl) then {
-//			if (BIS_fnc_arsenal_type == 0) then {
-//				if (_shift) then {
-//					_soldiers = [];
-//					{
-//						_soldiers set [count _soldiers,configName _x];
-//					} forEach ("isclass _x && getnumber (_x >> 'scope') > 1 && gettext (_x >> 'simulation') == 'soldier'" configClasses (configFile >> "cfgvehicles"));
-//					[_center,_soldiers call BIS_fnc_selectRandom] call BIS_fnc_loadInventory;
-//					["ListSelectCurrent",[_display]] call BIS_fnc_arsenal;
-//				}else {
-//					['buttonRandom',[_display]] call BIS_fnc_arsenal;
-//				};
-//			} else {
-//				['buttonRandom',[_display]] call BIS_fnc_garage;
-//			};
-//		};
-		_return = true;
+	case (_key == DIK_R && getMissionConfigValue[ "LARs_overrideVA_random", 0 ] isEqualTo 0 ): {
+		if (_ctrl) then {
+			if (BIS_fnc_arsenal_type == 0) then {
+				if (_shift) then {
+					_soldiers = [];
+					{
+						_soldiers set [count _soldiers,configName _x];
+					} forEach ("isclass _x && getnumber (_x >> 'scope') > 1 && gettext (_x >> 'simulation') == 'soldier'" configClasses (configFile >> "cfgvehicles"));
+					[_center,_soldiers call BIS_fnc_selectRandom] call BIS_fnc_loadInventory;
+					["ListSelectCurrent",[_display]] call BIS_fnc_arsenal;
+				}else {
+					['buttonRandom',[_display]] call BIS_fnc_arsenal;
+				};
+			} else {
+				['buttonRandom',[_display]] call BIS_fnc_garage;
+			};
+		};
 	};
 	//--- Toggle interface
 	case (_key == DIK_BACKSPACE && !_inTemplate): {

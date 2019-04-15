@@ -2,8 +2,6 @@
 #include "\A3\Ui_f\hpp\defineResinclDesign.inc"
 #include "macros.hpp"
 
-#define CONDITION( EQUIPMENT ) { EQUIPMENT == _x }count _whiteList > 0
-
 DEBUG( "LoadInventory WhiteList" );
 
 #define DEFAULT_SLOT 0
@@ -28,8 +26,11 @@ DEBUG( "LoadInventory WhiteList" );
 #define VEST_SLOT      701
 #define BACKPACK_SLOT  901
 
+
 scopeName "LARs_fnc_loadInventory_whiteList";
+
 private ["_cfg","_inventory","_isCfg","_whiteList"];
+
 _object = _this param [0,objNull,[objNull]];
 
 _cfg = _this param [1,configFile,[configFile,"",[]]];
@@ -186,9 +187,8 @@ if ( _backpack != "" ) then {
 //WEAPONS
 {
 	if ( _x != "" ) then {
-		_baseWeapon = _x call BIS_fnc_baseWeapon;
-		if ( CONDITION( _baseWeapon ) ) then {
-			_object addWeapon _baseWeapon;
+		if ( CONDITION( _x ) ) then {
+			_object addWeapon _x;
 		}else{
 			_notAllowed = true;
 			_notification = format[ "%1<br />%2 - %3", _notification, "Weapon", _x ];
@@ -196,7 +196,7 @@ if ( _backpack != "" ) then {
 	};
 } forEach [_inventory select 5,_inventory select 6 select 0,_inventory select 7 select 0,_inventory select 8 select 0];
 	
-//WEAPON LINKED ITEMS
+//WEAPON & LINKED - ITEMS
 {
 	_weaponType = _forEachIndex;
 	{
@@ -232,9 +232,7 @@ if ( _backpack != "" ) then {
 //UNIFORM ITEMS
 {
 	if ( CONDITION( _x ) ) then {
-		if ( uniform _object != "" ) then {
-			_object addItemToUniform _x;
-		};
+		_object addItemToUniform _x;
 	}else{
 		_notAllowed = true;
 		_notification = format[ "%1<br />%2 - %3", _notification, "Uniform Item", _x ];
@@ -244,9 +242,7 @@ if ( _backpack != "" ) then {
 //VEST ITEMS
 {
 	if ( CONDITION( _x ) ) then {
-		if ( vest _object != "" ) then {
-			_object addItemToVest _x;
-		};
+		_object addItemToVest _x;
 	}else{
 		_notAllowed = true;
 		_notification = format[ "%1<br />%2 - %3", _notification, "Vest Item", _x ];
@@ -256,9 +252,7 @@ if ( _backpack != "" ) then {
 //BACKPACK ITEMS
 {
 	if ( CONDITION( _x ) ) then {
-		if ( backpack _object != "" ) then {
-			_object addItemToBackpack _x;
-		};
+		_object addItemToBackpack _x;
 	}else{
 		_notAllowed = true;
 		_notification = format[ "%1<br />%2 - %3", _notification, "Backpack Item", _x ];
@@ -266,23 +260,46 @@ if ( _backpack != "" ) then {
 } forEach (_inventory select 2 select 1);
 
 
+//_showNotification = getMissionConfigValue[ "LARs_overrideVA_showMsg", 0 ];
+//if !( isNil { missionNamespace getVariable "LARs_overrideVA_msgThread" } ) then {
+//	disableSerialization;
+//	_display = uiNamespace getVariable "RscDisplayArsenal";
+//	_ctrlGrp = ( missionNamespace getVariable "LARs_overrideVA_msgCtrls" ) deleteAt 0;
+//	{
+//		_ctrl = _display displayCtrl _ctrlGrp controlsGroupCtrl _x;
+//		ctrlDelete _ctrl;
+//	}forEach ( missionNamespace getVariable "LARs_overrideVA_msgCtrls" );
+//	ctrlDelete ( _display displayCtrl _ctrlGrp );
+//
+//	terminate ( missionNamespace getVariable "LARs_overrideVA_msgThread" );
+//};
+//if ( _showNotification > 0 && { _notAllowed isEqualTo true } ) then {
+//	missionNamespace setVariable [ "LARs_overrideVA_msgThread", [ _notification, _showNotification ] spawn {
+//		disableSerialization;
+//		params[ "_notification", "_showNotification" ];
+//		_display = uiNamespace getVariable "RscDisplayArsenal";
+//		
+//		_ctrlGrp = _display ctrlCreate [ "RscControlsGroup", 1000 ];
+//		_ctrlGrp ctrlSetPosition[ 0, 0, 0.5, 0.5 ];
+//		_ctrlGrp ctrlCommit 0;
+//		_pic = _display ctrlCreate [ "RscPicture", 1001, _ctrlGrp ];
+//		_pic ctrlSetPosition[ 0, 0, 0.5, 2 ];
+//		_pic ctrlCommit 0;
+//		_pic ctrlSetText "#(rgb,8,8,3)color(0.2,0.2,0.2,1)";
+//		_ctrl = _display ctrlCreate [ "RscStructuredText", 1002, _ctrlGrp ];
+//		_ctrl ctrlSetPosition[ 0, 0, 0.5, 2 ];
+//		_ctrl ctrlCommit 0;
+//		_ctrl ctrlSetStructuredText parseText _notification;
+//		missionNamespace setVariable [ "LARs_overrideVA_msgCtrls", [ ctrlIDC _ctrlGrp, ctrlIDC _pic, ctrlIDC _ctrl ] ];
+//		uiSleep _showNotification;
+//		ctrlDelete _ctrl;
+//		ctrlDelete _pic;
+//		ctrlDelete _ctrlGrp;
+//	}];
+//};
 
-_showNotification = getMissionConfigValue[ "LARs_overrideVA_showMsg", 0 ];
-if ( _showNotification > 0 && { _notAllowed isEqualTo true } ) then {
-	h = [ _notification, _showNotification ] spawn {
-		disableSerialization;
-		params[ "_notification", "_showNotification" ];
-		_display = uiNamespace getVariable "RscDisplayArsenal";
-		_ctrlGrp = _display ctrlCreate [ "RscControlsGroup", 1000 ];
-		_ctrlGrp ctrlSetPosition[ 0, 0, 0.5, 0.5 ];
-		_ctrlGrp ctrlCommit 0;
-		_ctrl = _display ctrlCreate [ "RscStructuredText", 1001, _ctrlGrp ];
-		_ctrl ctrlSetPosition[ 0, 0, 0.5, 2 ];
-		_ctrl ctrlCommit 0;
-		_ctrl ctrlSetStructuredText parseText _notification;
-		uiSleep _showNotification;
-		ctrlDelete _ctrl;
-	};
+if ( _notAllowed ) then {
+	_notification
+}else{
+	""
 };
-
-true

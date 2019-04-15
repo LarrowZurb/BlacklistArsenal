@@ -1,1 +1,0 @@
-#define DEBUG( msg ) if ( getMissionConfigValue[ "LARs_overrideVA_debug", 0 ] > 0 ) then {  diag_log msg };

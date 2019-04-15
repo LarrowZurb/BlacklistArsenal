@@ -3,7 +3,9 @@
 #include "macros.hpp"
 
 DEBUG( "Override OK" );
-	
+
+private[ "_notification" ];
+
 _display = _this select 0;
 _center = (missionNamespace getVariable ["BIS_fnc_arsenal_center",player]);
 _hideTemplate = true;
@@ -27,7 +29,7 @@ if (ctrlEnabled _ctrlTemplateName) then {
 	_ctrlTemplateValue = _display displayCtrl IDC_RSCDISPLAYARSENAL_TEMPLATE_VALUENAME;
 	if ((_ctrlTemplateValue lbValue lnbCurSelRow _ctrlTemplateValue) >= 0) then {
 		_inventory = _ctrlTemplateValue lnbText [lnbCurSelRow _ctrlTemplateValue,0];
-		[_center,[profileNamespace,_inventory], LARs_override_virtualCargo] call LARs_fnc_loadInventory_whiteList;
+		_notification = [_center,[profileNamespace,_inventory], LARs_override_virtualCargo] call LARs_fnc_loadInventory_whiteList;
 
 		//--- Load custom data
 		_ctrlTemplateValue = _display displayCtrl IDC_RSCDISPLAYARSENAL_TEMPLATE_VALUENAME;
@@ -50,12 +52,18 @@ if (ctrlEnabled _ctrlTemplateName) then {
 		_hideTemplate = false;
 	};
 };
-if (_hideTemplate) then {
-	_ctrlTemplate = _display displayCtrl IDC_RSCDISPLAYARSENAL_TEMPLATE_TEMPLATE;
-	_ctrlTemplate ctrlSetFade 1;
-	_ctrlTemplate ctrlCommit 0;
-	_ctrlTemplate ctrlEnable false;
 
-	_ctrlMouseBlock = _display displayCtrl IDC_RSCDISPLAYARSENAL_MOUSEBLOCK;
-	_ctrlMouseBlock ctrlEnable false;
+
+
+if (_hideTemplate) then {
+	
+	if ( !isNil "_notification" ) then {
+		if !( _notification isEqualTo "" ) then {
+			[ _display, _notification, true ] call LARs_fnc_showRestrictedItems;
+		}else{
+			[ _display, "", false ] call LARs_fnc_showRestrictedItems;
+		};
+	}else{
+		[ _display, "", false ] call LARs_fnc_showRestrictedItems;
+	};
 };

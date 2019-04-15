@@ -41,6 +41,7 @@ _fnc_transClasses = {
 };
 
 
+//Config Vehicles - Soldiers, Backpacks and Ammo Boxes
 {
 	_cfgName = configName _x;
 	switch ( true ) do {
@@ -77,11 +78,10 @@ _fnc_transClasses = {
 							( configFile >> "CfgWeapons" >> _weapon >> "weaponSlotsInfo" ) call _fnc_compatibleWeaponItems;
 						};
 						{
-							_mags = [];
-							if ( _x isEqualTo "this" ) then {
-								_mags = getArray( configFile >> "CfgWeapons" >> _weapon >> "magazines" );
+							_mags = if ( _x isEqualTo "this" ) then {
+								getArray( configFile >> "CfgWeapons" >> _weapon >> "magazines" )
 							}else{
-								_mags = getArray( configFile >> "CfgWeapons" >> _weapon >> _x >> "magazines" );
+								getArray( configFile >> "CfgWeapons" >> _weapon >> _x >> "magazines" )
 							};
 							{
 								_nul = _gear pushBackUnique _x;
@@ -123,19 +123,39 @@ _fnc_transClasses = {
 
 		//"Ammo boxes";
 		case ( _cfgName isKindOf "ReammoBox_F" ) : {
-			_side = switch ( toLower( ( _cfgName splitString "_" ) select 1 ) ) do {
+			_nameArray = _cfgName splitString "_";
+			_sideName = if ( _nameArray select 1 == "t" ) then {
+				_nameArray select 2
+			}else{
+				_nameArray select 1
+			};
+			_side = switch ( toLower _sideName ) do {
 				case ( "east" ) : {
 					0
 				};
 				case ( "fia" ) : {
 					0
 				};
+				case ( "syndicate" ) : {
+					0
+				};
+				case ( "csat" ) : {
+					0
+				};
 				case ( "nato" ) : {
+					1
+				};
+				case ( "aaf" ) : {
 					1
 				};
 				case ( "ind" ) : {
 					2
 				};
+				case ( "gen" );
+				case ( "ied" ) : {
+					3
+				};
+				
 			};
 			if ( _side in [0,1,2,3] ) then {
 				_gear = LARs_sideGear select _side;
@@ -153,115 +173,152 @@ _fnc_transClasses = {
 	};
 }forEach ( "getNumber( _x >> 'scope' ) isEqualTo 2" configClasses ( configFile >> "CfgVehicles" ));
 
+
+//Config Weapons - Uniforms, Vests, Headgear and Bipods
 {
 	_cfgName = configName _x;
 	_cfg = _x;
-	if ( getNumber( _cfg >> "scope") isEqualTo 2 ) then {
+	
 
-		switch ( true ) do {
+	switch ( true ) do {
 
-			// "Uniforms";
-			case ( _cfgName isKindOf [ "Uniform_Base", configFile >> "CfgWeapons" ] ) : {
+		// "Uniforms";
+		case ( _cfgName isKindOf [ "Uniform_Base", configFile >> "CfgWeapons" ] ) : {
 
-				_baseMan = getText( _cfg >> "ItemInfo" >> "uniformClass" );
-				_side = getNumber( configFile >> "CfgVehicles" >> _baseman >> "side" );
-				if ( _side in [0,1,2,3] ) then {
-					_gear = ( LARs_sideGear select _side );
+			_baseMan = getText( _cfg >> "ItemInfo" >> "uniformClass" );
+			_side = getNumber( configFile >> "CfgVehicles" >> _baseman >> "side" );
+			if ( _side in [0,1,2,3] ) then {
+				_gear = ( LARs_sideGear select _side );
+				_nul = _gear pushBackUnique _cfgName;
+				LARs_sideGear set [ _side, _gear ];
+			};
+		};
+
+		// "Vests";
+		case ( _cfgName isKindOf [ "Vest_Camo_Base", configFile >> "CfgWeapons" ] || _cfgName isKindOf [ "Vest_NoCamo_Base", configFile >> "CfgWeapons" ] ) : {
+
+			_found = false;
+			{
+				if ( [ _x, getText( _cfg >> "displayName" ) ] call BIS_fnc_inString ) exitWith {
+					_gear = LARs_sideGear select _forEachIndex;
 					_nul = _gear pushBackUnique _cfgName;
-					LARs_sideGear set [ _side, _gear ];
+					LARs_sideGear set [ _forEachIndex, _gear ];
+					_found = true;
 				};
-			};
-
-			// "Vests";
-			case ( _cfgName isKindOf [ "Vest_Camo_Base", configFile >> "CfgWeapons" ] || _cfgName isKindOf [ "Vest_NoCamo_Base", configFile >> "CfgWeapons" ] ) : {
-
-				_found = false;
-				{
-					if ( [ _x, getText( _cfg >> "displayName" ) ] call BIS_fnc_inString ) exitWith {
-						_gear = LARs_sideGear select _forEachIndex;
-						_nul = _gear pushBackUnique _cfgName;
-						LARs_sideGear set [ _forEachIndex, _gear ];
-						_found = true;
-					};
-				}forEach [ "CSAT", "NATO", "AAF" ];
-				if ( _found ) exitWith {};
-
+			}forEach [ "CSAT", "NATO", "AAF" ];
+				
+			if !( _found ) then {
+				
 				{
 					_side = _x;
 					if ( _side in ( getText( _cfg >> "ItemInfo" >> "uniformModel" ) splitString "\" ) ) exitWith {
-						_gear = LARs_sideGear select _forEachIndex;
-						_nul = _gear pushBackUnique _cfgName;
-						LARs_sideGear set [ _forEachIndex, _gear ];
-					};
-				}forEach [ "OPFOR", "BLUFOR", "INDEP", "Civil" ];
-			};
-
-			// "Headgear";
-			case ( _cfgName isKindOf [ "H_HelmetB", configFile >> "CfgWeapons" ] || _cfgName isKindOf [ "HelmetBase", configFile >> "CfgWeapons" ] ) : {
-
-				_found = false;
-				{
-					if ( [ _x, getText( _cfg >> "displayName" ) ] call BIS_fnc_inString ) exitWith {
-						_gear = LARs_sideGear select _forEachIndex;
-						_nul = _gear pushBackUnique _cfgName;
-						LARs_sideGear set [ _forEachIndex, _gear ];
-						_found = true;
-					};
-				}forEach [ "CSAT", "NATO", "AAF" ];
-				if ( _found ) exitWith {};
-
-				{
-					_side = _x;
-					if ( _side in ( getText( _cfg >> "ItemInfo" >> "uniformModel" ) splitString "\" ) ) exitWith {
-						_gear = LARs_sideGear select _forEachIndex;
-						_nul = _gear pushBackUnique _cfgName;
-						LARs_sideGear set [ _forEachIndex, _gear ];
-						_found = true;
-					};
-				}forEach [ "OPFOR", "BLUFOR", "INDEP", "Civil" ];
-				if ( _found ) exitWith {};
-
-				{
-					switch ( _side ) do {
-						case 0;
-						case 1;
-						case 2 : {
-							_gear = LARs_sideGear select _side;
+						if ( _forEachIndex < 4 ) then {
+							_gear = LARs_sideGear select _forEachIndex;
 							_nul = _gear pushBackUnique _cfgName;
-							LARs_sideGear set [ _side, _gear ];
-						};
-						case 6 : {
+							LARs_sideGear set [ _forEachIndex, _gear ];
+						}else{
+							//Its Common add it to all sides
 							{
-								_gear = LARs_sideGear select _x;
+								_gear = LARs_sideGear select _forEachIndex;
 								_nul = _gear pushBackUnique _cfgName;
-								LARs_sideGear set [ _x, _gear ];
+								LARs_sideGear set [ _forEachIndex, _gear ];
 							}forEach [ 0, 1, 2, 3 ];
 						};
 					};
-
-				}forEach getArray( _cfg >> "ItemInfo" >> "modelSides" );
+				}forEach [ "OPFOR", "BLUFOR", "INDEP", "Civil", "Common" ];
 			};
 		};
+
+		// "Headgear";
+		case ( _cfgName isKindOf [ "H_HelmetB", configFile >> "CfgWeapons" ] || _cfgName isKindOf [ "HelmetBase", configFile >> "CfgWeapons" ] ) : {
+
+			_found = false;
+			{
+				if ( [ _x, getText( _cfg >> "displayName" ) ] call BIS_fnc_inString ) exitWith {
+					_gear = LARs_sideGear select _forEachIndex;
+					_nul = _gear pushBackUnique _cfgName;
+					LARs_sideGear set [ _forEachIndex, _gear ];
+					_found = true;
+				};
+			}forEach [ "CSAT", "NATO", "AAF" ];
+			
+			if !( _found ) then {
+				
+				{
+					_side = _x;
+					if ( _side in ( getText( _cfg >> "ItemInfo" >> "uniformModel" ) splitString "\" ) ) exitWith {
+						_gear = LARs_sideGear select _forEachIndex;
+						_nul = _gear pushBackUnique _cfgName;
+						LARs_sideGear set [ _forEachIndex, _gear ];
+						_found = true;
+					};
+				}forEach [ "OPFOR", "BLUFOR", "INDEP", "Civil" ];
+					
+				if !( _found ) then {
+					
+					_modelSides = getArray( _cfg >> "ItemInfo" >> "modelSides" );
+					
+					if ( count ( _modelSides - [ 3 ] ) > 0 ) then {
+						_modelSides = _modelSides - [ 3 ];
+					};
+					
+					{
+						_side = _x;
+						switch ( _side ) do {
+							case 0;
+							case 1;
+							case 2;
+							case 3 : {
+								_gear = LARs_sideGear select _side;
+								_nul = _gear pushBackUnique _cfgName;
+								LARs_sideGear set [ _side, _gear ];
+							};
+							case 6 : {
+								{
+									_gear = LARs_sideGear select _x;
+									_nul = _gear pushBackUnique _cfgName;
+									LARs_sideGear set [ _x, _gear ];
+								}forEach [ 0, 1, 2, 3 ];
+							};
+						};
+		
+					}forEach _modelSides;
+				};
+			};
+		};
+		
+		//Bipods
+//		case ( _cfgName isKindOf [ "bipod_01_F_snd", configFile >> "CfgWeapons" ] || { _cfgName == "bipod_01_F_snd" } ) : {
+//
+//			{
+//				if ( [ _x, getText( _cfg >> "displayName" ) ] call BIS_fnc_inString ) exitWith {
+//					_gear = LARs_sideGear select _forEachIndex;
+//					_nul = _gear pushBackUnique _cfgName;
+//					LARs_sideGear set [ _forEachIndex, _gear ];
+//				};
+//			}forEach [ "CSAT", "NATO", "AAF" ];
+//		};
 	};
 }forEach ( "getnumber( _x >> 'scope' ) isEqualTo 2" configClasses ( configFile >> "CfgWeapons" ));
 
+
+//Config Glasses - Add Glasses to all sides
 {
 	_cfg = _x;
 	_cfgName = configName _cfg;
-	if ( getNumber( _cfg >> "scope") isEqualTo 2 ) then {
-		{
-			_gear = LARs_sideGear select _x;
-			_nul = _gear pushBackUnique _cfgName;
-			LARs_sideGear set [ _x, _gear ];
-		}forEach [0,1,2,3];
-	};
+	{
+		_gear = LARs_sideGear select _x;
+		_nul = _gear pushBackUnique _cfgName;
+		LARs_sideGear set [ _x, _gear ];
+	}forEach [0,1,2,3];
 }forEach ( "getnumber( _x >> 'scope' ) isEqualTo 2" configClasses ( configFile >> "CfgGlasses" ));
+
 
 {
 	_gear = _x - [ "" ];
 	_gear = _gear arrayIntersect _gear;
 	LARs_sideGear set [ _forEachIndex, _gear ];
 }forEach LARs_sideGear;
-//LARs_sideGear = LARs_sideGear call LARs_fnc_toLower;
 
-diag_log "gear finished";
+
+//diag_log "gear finished";

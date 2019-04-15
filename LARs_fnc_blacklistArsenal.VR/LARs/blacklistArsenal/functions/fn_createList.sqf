@@ -24,7 +24,7 @@ private [ "_init", "_dataTypes" ];
 //	["accessorypointer"],
 //	["accessorymuzzle"],
 //	["bullet"],
-//	["grenade","smokeshell"],
+//	["grenade","smokeshell", "shell", "missile"],
 //	["mine","minebounding","minedirectional"],
 //	["firstaidkit","medikit","minedetector","toolkit"],
 //	["accessorybipod"]
@@ -162,8 +162,16 @@ switch ( toLower _listType ) do {
 						//Is it a CfgPatches class
 						if ( isClass( configFile >> "CfgPatches" >> _x ) ) then {
 							{
-								_nul = _newlist pushBack _x;
-							}forEach getArray( configFile >> "CfgPatches" >> _x >> "units" );
+								{
+									_itemType = ( _x call BIS_fnc_itemType ) select 0; 
+									if ( { _itemType == _x }count [ "Weapon", "Item", "Equipment", "Magazine", "Mine" ] ) then {
+										_nul = _newlist pushBack _x;
+									};
+								}forEach _x;
+							}forEach [
+								getArray( configFile >> "CfgPatches" >> _x >> "units" ),
+								getArray( configFile >> "CfgPatches" >> _x >> "weapons" )
+							];
 						}else{
 							//Its a classname so push item into the list
 							_nul = _newlist pushBack _x;
@@ -239,8 +247,8 @@ switch ( toLower _listType ) do {
 							isClass( configFile >> "CfgWeapons" >> _item ) ||
 							isClass( configFile >> "CfgGlasses" >> _item )
 						) then {
-							format[ "VC Index for %1 not found", _item ] call BIS_fnc_error;
-							diag_log format[ "VC Index for %1 not found", _item ];
+							format[ "VirtualCargo Index for %1 not found", _item ] call BIS_fnc_error;
+							diag_log format[ "VirtualCargo Index for %1 not found", _item ];
 						};
 					};
 //				}forEach _x;

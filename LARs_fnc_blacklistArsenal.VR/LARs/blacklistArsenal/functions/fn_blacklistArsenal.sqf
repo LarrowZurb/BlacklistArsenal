@@ -49,7 +49,7 @@ ERROR( isNil { _box getVariable [ format[ "LARs_arsenal_%1_data", _arsenalName ]
 
 [ _box ] call BIS_fnc_objectVar;
 
-if !( _target isEqualType false )  exitWith {
+if !( _target isEqualType false ) exitWith {
 	_this set [ 2, false ];
 	_this remoteExec [ "LARs_fnc_blacklistArsenal", _target, format[ "%1_%2", _box, _arsenalName ] ]
 };

@@ -1,27 +1,17 @@
 ﻿//respawn for testing JIP
 respawn = 3;
 respawnDelay = 1;
-
 enableDebugConsole = 2;
 
-//******
-//Following are settings for LARs_blacklistArsenal
-//******
 
-//Enable side gear for white/backlists
-LARs_calculateSideGear = 1;
+//Settings for BlacklistArsenal
+#include "LARs\blacklistArsenal\blacklistArsenal_settings.hpp"
+//Settings for override templates
+#include "LARs\blacklistArsenal\override_templates_settings.hpp"
 
-//Apply whitelist to VA loadouts
-LARs_whitelistLoadouts = 1;
-
-//Show RPT debug info
-LARs_overrideVA_debug = 1;
-
-//Display client message if they load an inventory with items that are not allowed
-//0 - disabled,  > 0 time to show message
-LARs_overrideVA_showMsg = 10;
-
+//One function include will include all functions
+//for both BlacklistArsenal & override templates
 class CfgFunctions {
-	#include "LARs\blacklistArsenal.cpp"
+	#include "LARs\blacklistArsenal\functions\blacklistArsenal.fncs"
 };
 

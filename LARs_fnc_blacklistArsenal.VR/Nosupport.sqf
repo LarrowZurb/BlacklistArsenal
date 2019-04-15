@@ -10,6 +10,8 @@ blacklist = [
 	"launch_RPG32_F",
 	"launch_Titan_short_F",
 	"launch_Titan_F",
+	"launch_B_Titan_tna_F",
+	"launch_B_Titan_short_tna_F",
 
 	"B_Respawn_Sleeping_bag_blue_F", //backpack respawn sleeping bags
 	"B_Respawn_Sleeping_bag_brown_F",
